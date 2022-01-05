@@ -4,14 +4,15 @@ import Logo from '../components/Logo'
 import Header from '../components/Header'
 import Button from '../components/Button'
 import Paragraph from '../components/Paragraph'
+import Message from '../components/Message'
 
 export default function StartScreen({ navigation }) {
   return (
     <Background>
-      <Logo />
-      <Header>Login Template</Header>
+      {/* <Logo /> */}
+      <Header>Welcome to Wheebox</Header>
       <Paragraph>
-        The easiest way to start with your amazing application.
+        The easiest way to conduct online assessment
       </Paragraph>
       <Button
         mode="contained"
@@ -23,7 +24,7 @@ export default function StartScreen({ navigation }) {
         mode="outlined"
         onPress={() => navigation.navigate('RegisterScreen')}
       >
-        Sign Up
+        Register
       </Button>
     </Background>
   )

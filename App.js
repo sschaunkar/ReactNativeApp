@@ -20,7 +20,7 @@ export default function App() {
         <Stack.Navigator
           initialRouteName="StartScreen"
           screenOptions={{
-            headerShown: false,
+            headerShown: true,
           }}
         >
           <Stack.Screen name="StartScreen" component={StartScreen} />

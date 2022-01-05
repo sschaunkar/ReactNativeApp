@@ -11,11 +11,17 @@ import { theme } from '../core/theme'
 import { emailValidator } from '../helpers/emailValidator'
 import { passwordValidator } from '../helpers/passwordValidator'
 import { nameValidator } from '../helpers/nameValidator'
+import Message from '../components/Message'
+
 
 export default function RegisterScreen({ navigation }) {
   const [name, setName] = useState({ value: '', error: '' })
   const [email, setEmail] = useState({ value: '', error: '' })
   const [password, setPassword] = useState({ value: '', error: '' })
+  const [showAlert, setShowAlert] = useState(false);
+  const [msgtitle, setmsgtitle] = useState("");
+  const [msgbody, setmsgbody] = useState("");
+  
 
   const onSignUpPressed = () => {
     const nameError = nameValidator(name.value)
@@ -27,17 +33,63 @@ export default function RegisterScreen({ navigation }) {
       setPassword({ ...password, error: passwordError })
       return
     }
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Dashboard' }],
-    })
+console.log("name :",name,"Email", email, "Password",password)
+    const user={
+      "name":name.value,
+      "email":email.value,
+      "password":password.value
+    }
+    async function postData(url,data){
+      const requestOp = {
+          method:'POST',
+          mode:'cors',
+          cache:'no-cache',
+          credentials: 'same-origin',
+          headers:{
+            Accept:'application/json',
+            'Content-Type':'application/json'
+          },
+          redirect: 'follow',
+          referrerPolicy: 'no-referrer',
+          body:JSON.stringify(data)
+        
+      }
+      const response =  await fetch(url,requestOp)
+  
+      return response.json();
+  };
+
+  postData('http://6540-150-129-237-199.ngrok.io/register',user)
+  .then(response => {
+    console.log(response); // JSON data parsed by `data.json()` call
+    if(response.statuscode==200){
+      setmsgtitle("Register Alert");
+      setmsgbody(response.message);
+      setShowAlert(currentstate=>!currentstate);
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Dashboard' }],
+      })
+    } else{
+      setmsgtitle("Register Alert");
+      setmsgbody(response.message);
+      setShowAlert(currentstate=>!currentstate);
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'StartScreen' }],
+      })
+    }
+  });
+    
+   
   }
 
   return (
     <Background>
       <BackButton goBack={navigation.goBack} />
       <Logo />
-      <Header>Create Account</Header>
+      <Header>Register User</Header>
+      {showAlert && <Message msgtitle={msgtitle} msgbody={msgbody}/>}
       <TextInput
         label="Name"
         returnKeyType="next"
